@@ -1,36 +1,42 @@
 class Solution {
 public:
-   typedef pair<int, string> P;
-
     vector<string> topKFrequent(vector<string>& words, int k) {
-        unordered_map<string, int> wordCount;
-        for (const auto& word : words) {
-            wordCount[word]++;
-        }
-        
-        // Create a vector of pairs (word, frequency)
-        vector<pair<string, int>> freqPairs;
-        for (const auto& entry : wordCount) {
-            freqPairs.push_back(entry);
-        }
-        
+         unordered_map<string, int> mp;
 
-        auto comparator = [](const pair<string, int>& a, const pair<string, int>& b) {
-            if (a.second != b.second) {
-                return a.second > b.second; // Higher frequency first
+        // Count word frequencies
+        for(auto& word : words){
+            mp[word]++;
+        }
+       
+        // Custom comparator for min heap:
+        // The word with lower frequency or (if frequencies are same) 
+        // lexicographically larger word should be at the top
+        auto comparator = [](const pair<int, string>& a, const pair<int, string>& b) {
+            if (a.first != b.first) {
+                return a.first > b.first; // Lower frequency at top
             }
-            return a.first < b.first; // Lexicographically smaller first
+            return a.second < b.second; // For same frequency, lexicographically smaller at bottom
         };
         
-        // Sort using the custom comparator
-        sort(freqPairs.begin(), freqPairs.end(), comparator);
-        
-        // Extract the top k words
-        vector<string> result;
-        for (int i = 0; i < k && i < freqPairs.size(); i++) {
-            result.push_back(freqPairs[i].first);
+        priority_queue<pair<int, string>, vector<pair<int, string>>, decltype(comparator)> minh(comparator);
+
+        // Add words to min-heap, keeping only k elements
+        for(auto it : mp){
+            string s = it.first;
+            int freq = it.second;
+            minh.push({freq, s});
+
+            if(minh.size() > k)
+                minh.pop();  // Remove word with lowest frequency or lexicographically larger if tied
         }
+     
+        // Extract result (will be in reverse order)
+        vector<string> ans;
+        while(!minh.empty()){
+           ans.push_back(minh.top().second);
+           minh.pop();
+           }
+        reverse(ans.begin(), ans.end());
         
-        return result;
-    }
+        return ans;}
 };
