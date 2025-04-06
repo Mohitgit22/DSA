@@ -1,33 +1,23 @@
 class Solution {
 public:
-    void f(vector<int>& nums, int idx,vector<int>& currsubset,vector<vector<int>>& allsubsets) {
+    void f(vector<int>& nums, int idx,int currxor, int& ans) {
        if(idx == nums.size()){
-        allsubsets.push_back(currsubset);
+        ans += currxor;
         return ;
        }
-       
        //not pick
-       f(nums, idx + 1, currsubset, allsubsets);
+       f(nums, idx + 1, currxor, ans);
        //pick
-       currsubset.push_back(nums[idx]);
-       f(nums, idx + 1, currsubset, allsubsets);
-       currsubset.pop_back();
+       f(nums, idx + 1, currxor ^ nums[idx], ans);
     }
 
     int subsetXORSum(vector<int>& nums) {
-        vector<vector<int>> allsubsets;
         vector<int> currsubset;
+        int currxor = 0;
+        int ans = 0;
 
-        f(nums, 0, currsubset, allsubsets);
+        f(nums, 0, currxor, ans);
 
-         int ans = 0;
-        for(auto it : allsubsets){
-            int xorOfEl = 0;
-            for(auto x : it){
-                xorOfEl ^= x;
-            }
-            ans += xorOfEl;
-        }
         return ans;
     }
 };
