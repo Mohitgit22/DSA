@@ -21,9 +21,9 @@ public:
         auto it = upper_bound(row.begin(), row.end(), target);
         int ind = it - row.begin() - 1;
        
+       //for [[1]] and target = 0, then we get ind = -1;
         if(ind < 0) return false;
 
-        // cout<<ind<<" indes us";
         row = matrix[ind];
         return search(row, target);
     }
