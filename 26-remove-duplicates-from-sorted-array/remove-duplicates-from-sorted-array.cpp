@@ -4,16 +4,16 @@ public:
         int i = 0, j = 0;
         int n = nums.size();
         nums[i] = nums[0];
-
         while(j < n){
-             if(nums[i] == nums[j]){
-                j++;
-                continue;
-             }
+           if(nums[j] == nums[i])
+           {
+            j++;
+            continue;
+           }
 
-             i++;
-             nums[i] = nums[j];
-             j++;
+           i++;
+           nums[i] = nums[j];
+           j++;
         }
 
         return i+1;
