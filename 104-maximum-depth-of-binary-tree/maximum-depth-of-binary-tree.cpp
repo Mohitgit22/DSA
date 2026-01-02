@@ -11,16 +11,15 @@
  */
 class Solution {
 public:
-    int depth(TreeNode* root){
-        if(root== nullptr)
-         return 0;
+    int maxd (TreeNode* root){
+        if(root == nullptr) return 0;
 
-        return 1 + max(depth(root->left), depth(root->right));
+        return (1 + max(maxd(root->left), maxd(root->right)));
     }
 
     int maxDepth(TreeNode* root) {
         if(root == nullptr) return 0;
 
-        return depth(root);
+        return maxd(root);
     }
 };
